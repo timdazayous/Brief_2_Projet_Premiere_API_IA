@@ -1,5 +1,5 @@
 #### Installation des bibliothèques
-`pip install fastapi uvicorn`
+`pip install fastapi uvicorn loguru streamlit requests python-dotenv`
 
 Un mini programme complet:
 * **frontend** (streamlit)
@@ -20,9 +20,10 @@ mon_projet/
 ├── frontend
 │   ├── app.py
 │   └── pages
-│       ├──
-│       └── 
+│       ├── 0_insérer.py
+│       └── 1_Afficher.py
 ├── README.md
+├── .env
 ├── .venv
 └── .gitignore
 ```
