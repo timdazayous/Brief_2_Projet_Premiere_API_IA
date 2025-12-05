@@ -1,5 +1,4 @@
 # backend/modules/df_tools.py
-from pydantic import BaseModel
 from loguru import logger 
 import pandas as pd
 import os 
@@ -10,7 +9,7 @@ def write_db(df: pd.DataFrame):
     df.to_csv(CSV_FILE_PATH, index=True, index_label='id')
 
 def read_db()->pd.DataFrame:
-    df = pd.read_csv(CSV_FILE_PATH, index_cols='id')
+    df = pd.read_csv(CSV_FILE_PATH, index_col='id')
     return df
 
 def initialize_db():

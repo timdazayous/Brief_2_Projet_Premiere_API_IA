@@ -2,42 +2,62 @@
 from fastapi import FastAPI
 import uvicorn
 import os 
+import pandas as pd
 from dotenv import load_dotenv 
-
+from pydantic import BaseModel
+from modules.df_tools import read_db, write_db, initialize_db
+from typing import List
 load_dotenv()
 
-API_ROOT_URL =  f"http://127.0.0.1:{os.getenv('FASTAPI_PORT', '8080')}"
-                                    
+# modèles pydantic
+class QuoteRequest(BaseModel):
+    text : str
 
-# def timer_decorator(function):
-#     def wrapper(*args, **kwargs):
-#         start = time.perf_counter()
-#         result = function(*args, **kwargs)
-#         end = time.perf_counter()
-#         print(f"La fonction {function.__name__} a été exécutée en : {end - start: .5f} secondes")
-#         return result
-#     return wrapper
+class QuoteResponse(BaseModel):
+    id : int
+    text : str    
+
+# creation si besoin de la base de données
+initialize_db()
 
 # --- Configuration ---
 app = FastAPI(title="API")
-
-# --- Routes API ---
-# http://www.google.com/fr route fr
-# http://www.google.com/en route en 
-# http://www.google.com/ route principale
 
 @app.get("/")
 def read_root():
     return {"Hello": "World", "status": "API is running"}
 
+@app.post("/insert/", response_model= QuoteResponse)
+def insert_quote(quote : QuoteRequest):
+    """Insère une nouvelle citation"""
 
+    # 1. trouver le dernier id dans le csv
+    df = read_db()
 
+    # 2. donne un id a ma citation
+    if df.empty :
+        new_id = 1
+    elif df.index.max() <= 0 :
+        new_id = 1
+    else :
+        new_id = 1 + df.index.max()
 
+    # 3.1 créer la nouvelle ligne
+    objet = {"text": [quote.text]}
+    new_row = pd.DataFrame(objet, index = [new_id])
 
+    # 3.2 enregistrer le fichier csv
+    df = pd.concat([df, new_row])
+    write_db(df)
 
+    # 4. pour la confirmation je vais envoyer à l'application
+    # la citation avec son id
+    return {"id":new_id, "text":quote.text}
 
-
-
+@app.get("/read/", response_model=List[QuoteResponse])
+def read_all_quotes():
+    df = read_db()
+    return df.to_json()
 
 
 
