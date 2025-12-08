@@ -17,6 +17,7 @@ class QuoteResponse(BaseModel):
     id : int
     text : str    
 
+
 # creation si besoin de la base de données
 initialize_db()
 
