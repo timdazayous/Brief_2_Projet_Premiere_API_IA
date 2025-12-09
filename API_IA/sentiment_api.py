@@ -58,7 +58,7 @@ def analyse_sentiment(quote: QuoteIAnalyse):
 #         app,               # on passe directement l'objet app, pas le chemin "API_IA.sentiment_api:app"
 #         host=url,
 #         port=port,
-#         reload=True,
+#         reload=False,
 #     )
 
 # if __name__ == "__main__":
@@ -83,22 +83,55 @@ def analyse_sentiment(quote: QuoteIAnalyse):
 #         reload=True,
 #     )
 
-if __name__ == "__main__":
-    # 1 - on récupère le port de l'API
-    try:
-        print("Hello")
-        port = os.getenv('FAST_API_2_PORT')
-        url = os.getenv('API_BASE_URL')
-        port = int(port)
-        print(port)
-    except ValueError:
-        print("ERREUR")
-        port = 8080
+# if __name__ == "__main__":
+#     # 1 - on récupère le port de l'API
+#     try:
+#         print("Hello")
+#         port = os.getenv('FAST_API_2_PORT')
+#         url = os.getenv('API_BASE_URL')
+#         port = int(port)
+#         print(port)
+#     except ValueError:
+#         print("ERREUR")
+#         port = 8080
 
-    # 2 - On lance uvicorn
-    uvicorn.run(
-        "API_IA.sentiment_api:app", 
-        host = url,
-        port = port, 
-        reload = True
-    )
+#     # 2 - On lance uvicorn
+#     uvicorn.run(
+#         "API_IA.sentiment_api:app", 
+#         host = url,
+#         port = port, 
+#         reload = True
+#     )
+
+# if __name__ == "__main__": # uvicorn API_IA.sentiment_api:app --host 127.0.0.1 --port 9000 --reload
+
+#     print("Hello")
+#     url = os.getenv("API_BASE_URL", "127.0.0.1")
+#     port_str = os.getenv("FAST_API_2_PORT", "9000")
+#     try:
+#         port = int(port_str)
+#         print(port)
+#     except ValueError:
+#         print("ERREUR")
+#         port = 9000
+#     uvicorn.run(
+#         "API_IA.sentiment_api:app",  # string
+#         host=url,
+#         port=port,
+#         reload=True,
+#     )
+
+if __name__ == "__main__":
+    import subprocess
+    import sys
+
+    # relance uvicorn comme tu le fais dans le terminal
+    cmd = [
+        sys.executable,               # python du venv
+        "-m", "uvicorn",
+        "API_IA.sentiment_api:app",
+        "--host", "127.0.0.1",
+        "--port", "9000",
+        "--reload",
+    ]
+    subprocess.run(cmd)

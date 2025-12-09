@@ -1,11 +1,12 @@
 # API_IA\3_analyser_sentiment.py
 import streamlit as st
 import requests
-import dotenv
+from dotenv import load_dotenv
 import os
 from loguru import logger
-import uvicorn
 
+
+load_dotenv()
 API_ROOT_URL =  f"http://{os.getenv('API_BASE_URL')}:{os.getenv('FAST_API_2_PORT', '8080')}"
 API_IA_URL =  API_ROOT_URL + "/analyse_sentiment/"
 
@@ -23,10 +24,10 @@ if st.button("Analyse IA"):
             sentiment = response.json()
 
             st.write("Résultats de l'analyse IA Sentiment: ")
-            st.write(f"Polarité négative : {sentiment["neg"]} ")
-            st.write(f"Polarité neutre   : {sentiment["neu"]} ")
-            st.write(f"Polarité positive : {sentiment["pos"]} ")
-            st.write(f"Polarité composée : {sentiment["compound"]} ")
+            st.write(f"Polarité négative : {sentiment['neg']} ")
+            st.write(f"Polarité neutre   : {sentiment['neu']} ")
+            st.write(f"Polarité positive : {sentiment['pos']} ")
+            st.write(f"Polarité composée : {sentiment['compound']} ")
 
             logger.info(f"Affichage resultat: {sentiment}")
         except requests.exceptions.RequestException as e:
