@@ -5,6 +5,9 @@ from loguru import logger
 import os
 from fastapi import FastAPI
 import uvicorn
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # modèle pydantic
 class QuoteIAnalyse(BaseModel):
@@ -39,4 +42,63 @@ def analyse_sentiment(quote: QuoteIAnalyse):
     except Exception as e:
         logger.error(f"Erreur lors de l'analyse IA: {e}")
 
+# if __name__ == "__main__":
+#     print("Hello")
+#     url = os.getenv("API_BASE_URL", "127.0.0.1")
+#     port_str = os.getenv("FAST_API_2_PORT", "8000")
 
+#     try:
+#         port = int(port_str)
+#         print(port)
+#     except ValueError:
+#         print("ERREUR")
+#         port = 8000
+
+#     uvicorn.run(
+#         app,               # on passe directement l'objet app, pas le chemin "API_IA.sentiment_api:app"
+#         host=url,
+#         port=port,
+#         reload=True,
+#     )
+
+# if __name__ == "__main__":
+#     import os
+#     import uvicorn
+
+#     print("Hello")
+#     url = os.getenv("API_BASE_URL", "127.0.0.1")
+#     port_str = os.getenv("FAST_API_2_PORT", "8000")
+
+#     try:
+#         port = int(port_str)
+#         print(port)
+#     except ValueError:
+#         print("ERREUR")
+#         port = 8000
+
+#     uvicorn.run(
+#         "API_IA.sentiment_api:app",  # <- correspond à ton arborescence
+#         host=url,
+#         port=port,
+#         reload=True,
+#     )
+
+if __name__ == "__main__":
+    # 1 - on récupère le port de l'API
+    try:
+        print("Hello")
+        port = os.getenv('FAST_API_2_PORT')
+        url = os.getenv('API_BASE_URL')
+        port = int(port)
+        print(port)
+    except ValueError:
+        print("ERREUR")
+        port = 8080
+
+    # 2 - On lance uvicorn
+    uvicorn.run(
+        "API_IA.sentiment_api:app", 
+        host = url,
+        port = port, 
+        reload = True
+    )

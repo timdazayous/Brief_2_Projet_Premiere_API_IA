@@ -99,7 +99,7 @@ if __name__ == "__main__":
         print(port)
     except ValueError:
         print("ERREUR")
-        port = 8080
+        port = 9090
 
     # 2 - On lance uvicorn
     uvicorn.run(
