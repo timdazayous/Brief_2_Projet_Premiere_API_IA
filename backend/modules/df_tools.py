@@ -17,6 +17,14 @@ def read_db()->pd.DataFrame:
                 df.loc[index, col] = "NULL_REPLACEMENT_VALUE"
     return df
 
+# def read_db() -> pd.DataFrame:
+#     df = pd.read_csv(CSV_FILE_PATH, index_col="id")
+#     if df.isna().any().any():
+#         logger.info("NaN trouvés dans le DataFrame, remplacement par 'NULL_REPLACEMENT_VALUE'")
+#         df = df.fillna("NULL_REPLACEMENT_VALUE")
+#     return df
+
+
 def get_all_quotes(file_path: str):
     df = pd.read_csv(file_path)
     return df
