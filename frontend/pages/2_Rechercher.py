@@ -7,8 +7,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_ROOT_URL =  f"http://{os.getenv('API_BASE_URL')}:{os.getenv('FAST_API_PORT', '9090')}"
-API_IA_URL = f"http://{os.getenv('API_BASE_URL')}:{os.getenv('FAST_API_2_PORT', '8080')}/analyse_sentiment"
+# API_ROOT_URL =  f"http://{os.getenv('API_BASE_URL')}:{os.getenv('FAST_API_PORT', '9090')}"
+# API_IA_URL = f"http://{os.getenv('API_BASE_URL')}:{os.getenv('FAST_API_2_PORT', '8080')}/analyse_sentiment"
+
+API_ROOT_URL = f"http://{os.getenv('API_BASE_URL')}:{os.getenv('FAST_API_PORT', '9000')}"
+API_IA_URL   = f"http://{os.getenv('API_BASE_URL')}:{os.getenv('FAST_API_2_PORT', '8000')}/analyse_sentiment/"
 
 st.title("Lire une citation")
 
@@ -72,7 +75,9 @@ else:
     if submitted:
         # appel la route /read/id
         try : 
-            response = requests.get( API_URL + str(quote_id) )
+            # response = requests.get( API_IA_URL + str(quote_id) )
+            response = requests.get(API_URL + str(quote_id))
+
         # le reste est pareil
             if response.status_code == 200:
                 result = response.json()

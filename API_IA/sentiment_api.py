@@ -121,19 +121,36 @@ def analyse_sentiment(quote: QuoteIAnalyse):
 #         reload=True,
 #     )
 
+# if __name__ == "__main__":
+#     import subprocess
+#     import sys
+
+#     # relance uvicorn comme tu le fais dans le terminal
+#     cmd = [
+#         sys.executable,               # python du venv
+#         "-m", "uvicorn",
+#         "API_IA.sentiment_api:app",
+#         "--host", "127.0.0.1",
+#         "--port", "9000",
+#         "--reload",
+#     ]
+#     subprocess.run(cmd)
+
 if __name__ == "__main__":
-    import subprocess
-    import sys
+    import os
+    import uvicorn
 
-    # relance uvicorn comme tu le fais dans le terminal
-    cmd = [
-        sys.executable,               # python du venv
-        "-m", "uvicorn",
+    url = os.getenv("API_BASE_URL", "127.0.0.1")
+    port_str = os.getenv("FAST_API_2_PORT", "8000")
+
+    try:
+        port = int(port_str)
+    except ValueError:
+        port = 8000
+
+    uvicorn.run(
         "API_IA.sentiment_api:app",
-        "--host", "127.0.0.1",
-        "--port", "9000",
-        "--reload",
-    ]
-    subprocess.run(cmd)
-
-    
+        host=url,
+        port=port,
+        reload=True,
+    )
