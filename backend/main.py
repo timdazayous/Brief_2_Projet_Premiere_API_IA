@@ -89,22 +89,52 @@ def read_random_quotes():
     # retourne les résultats
     return quote_data
 
+# if __name__ == "__main__":
+#     # 1 - on récupère le port de l'API
+#     try:
+#         print("Hello")
+#         port_str = os.getenv('FAST_API_PORT', "9090")
+#         url_env = os.getenv('API_BASE_URL', "127.0.0.1")
+#         port = int(port_str)
+#         print(port)
+#     except ValueError:
+#         print("ERREUR")
+#         port = 9090
+#     # 2 - On lance uvicorn
+#     uvicorn.run(
+#         "main:app", 
+#         host = url,
+#         port = port, 
+#         reload = True
+#     )
+
 if __name__ == "__main__":
-    # 1 - on récupère le port de l'API
+    print("Hello")
+
+    url_env = os.getenv("API_BASE_URL")
+    port_env = os.getenv("FAST_API_PORT")
+
+    # url toujours définie
+    if url_env is None:
+        url = "127.0.0.1"
+    else:
+        url = url_env
+
+    # port_str toujours défini
+    if port_env is None:
+        port_str = "9090"
+    else:
+        port_str = port_env
+
     try:
-        print("Hello")
-        port = os.getenv('FAST_API_PORT')
-        url = os.getenv('API_BASE_URL')
-        port = int(port)
+        port = int(port_str)
         print(port)
     except ValueError:
-        print("ERREUR")
+        print("ERREUR conversion port, utilisation de 9090")
         port = 9090
-
-    # 2 - On lance uvicorn
     uvicorn.run(
-        "main:app", 
-        host = url,
-        port = port, 
-        reload = True
+        "main:app",
+        host=url,
+        port=port,
+        reload=True,
     )

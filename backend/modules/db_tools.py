@@ -55,15 +55,23 @@ def read_db()->pd.DataFrame:
     
     df = pd.DataFrame(data).set_index("id")
 
+    df = df.astype("object")
+
     # nettoayge NAN comme dans 
-    for index, row in df.iterrows() : 
-        for col in df.columns:
-            if pd.isna(row[col]):
-                logger.info(f"NaN trouvé à la ligne {index}, colonne '{col}' remplacé par la valeur 'NULL'")
-                df.loc[index, col] = "NULL_REPLACEMENT_VALUE"
+    if df.isna().any().any():  # <-- MODIF 2 : check global des NaN [web:1]
+        logger.info("NaN trouvés dans le DataFrame, remplacement par 'NULL_REPLACEMENT_VALUE'")
+        df = df.fillna("NULL_REPLACEMENT_VALUE")  # <-- MODIF 3 : remplacement propre des NaN [web:1]
+
+    return df
+
+    # for index, row in df.iterrows() : 
+    #     for col in df.columns:
+    #         if pd.isna(row[col]):
+    #             logger.info(f"NaN trouvé à la ligne {index}, colonne '{col}' remplacé par la valeur 'NULL'")
+    #             df.loc[index, col] = "NULL_REPLACEMENT_VALUE"
     
-    # print("DATA =", data)
-    # print("COLUMNS =", df.columns)
+    # # print("DATA =", data)
+    # # print("COLUMNS =", df.columns)
 
     return df
 
