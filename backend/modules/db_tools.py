@@ -23,17 +23,29 @@ TABLE_NAME = "quotes"
 def get_session():
     return session_locale() # permet de créer une session quand on en a besoin
 
-def write_db(df: pd.DataFrame):
-    #df.to_csv(CSV_FILE_PATH, index=True, index_label='id')
-    #print("write_df\n", df)
-    df.to_sql(
-        TABLE_NAME,
-        con=engine,
-        if_exists='replace', # supprime et remplace la db si deja existante avec la nouvelle db modifiée
-        index=True,
-        index_label='id'
-    )
+# def write_db(df: pd.DataFrame):
+#     #df.to_csv(CSV_FILE_PATH, index=True, index_label='id')
+#     #print("write_df\n", df)
+#     df.to_sql(
+#         TABLE_NAME,
+#         con=engine,
+#         if_exists='replace', # supprime et remplace la db si deja existante avec la nouvelle db modifiée
+#         index=True,
+#         index_label='id'
+#     )
 
+def write_db(df: pd.DataFrame):
+    """Écrit les données du DataFrame dans la table quotes via SQLAlchemy."""
+    with get_session() as session:
+        # On vide la table si on veut le comportement "replace"
+        session.query(Quote).delete()
+        session.flush()
+
+        for _, row in df.iterrows():
+            session.add(Quote(text=row["text"]))
+
+        session.commit()
+        
 def read_db()->pd.DataFrame:
     # df = pd.read_csv(CSV_FILE_PATH, index_col='id')
 
